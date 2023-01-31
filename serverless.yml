@@ -1,0 +1,18 @@
+org: pnguyen4
+app: aws-node-express-api-project
+service: aws-node-express-api-project
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  timeout: 15
+
+plugins:
+  - serverless-offline
+
+functions:
+  api:                         # name of function on AWS's side
+    handler: dist/handler.handler   # name of function specified in handler.js module.exports.handler
+    events:                    # we make use of serverless-http to wrap our express app into one big function
+      - httpApi: '*'           # express handles all the routing internally so we don't need to specify anything here
