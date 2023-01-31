@@ -54,25 +54,25 @@ _Note_: In current form, after deployment, your API is public and can be invoked
 After successful deployment, you can call the created application via HTTP:
 
 ```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
+curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/api
 ```
 
 Which should result in the following response:
 
 ```
-{"message":"Hello from root!"}
+{"message":"Hello from REST API"}
 ```
 
-Calling the `/hello` path with:
+Calling the `/graphql` path with:
 
 ```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/hello
+curl localhost:3000/graphql -X POST -H 'content-type: application/json' --data '{ "query" : "{ hello }" }'
 ```
 
 Should result in the following response:
 
 ```bash
-{"message":"Hello from path!"}
+{"message":"Hello from GraphQL API"}
 ```
 
 If you try to invoke a path or method that does not have a configured handler, e.g. with:
@@ -89,15 +89,8 @@ You should receive the following response:
 
 ### Local development
 
-It is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
-
-```bash
-serverless plugin install -n serverless-offline
-```
-
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
-
-After installation, you can start local emulation with:
+It is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. 
+You can start local emulation with:
 
 ```
 serverless offline
