@@ -89,6 +89,14 @@ You should receive the following response:
 
 ### Local development
 
+You can compile the typescript code and run a local server with with:
+
+```bash
+npm run dev
+```
+
+This will automatically recompile and restart the server after edits.
+
 It is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. 
 You can start local emulation with:
 
