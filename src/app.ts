@@ -1,36 +1,30 @@
-const { ApolloServer } = require('@apollo/server');
-//const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
-const http = require('http');
-const { expressMiddleware } = require('@apollo/server/express4');
-const { gql } = require('graphql-tag');
-const cors = require('cors');
 import express, { Express, Request, Response } from 'express';
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
+const cors = require('cors');
+const typeDefs = require('./schema');
+const resolvers = require('./resolvers');
+
+let products = [
+  { id: 1, name: "item1", price: "9.99" },
+  { id: 2, name: "item2", price: "1.99" },
+  { id: 3, name: "item3", price: "3.99" },
+];
 
 const app = express();
-// for Apollo Drain Server Plugin to enable graceful shutdown
-//const httpServer = http.createServer(app);
-
-const typeDefs = gql`
-  type Query {
-    hello: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => "Hello from GraphQL API",
-  },
-};
-
 const gqlserver = new ApolloServer({
   typeDefs,
   resolvers,
-  //plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
+
 
 // synchronous start, for compatibility with lambda
 gqlserver.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
-app.use('/graphql', cors(), express.json(), expressMiddleware(gqlserver));
+app.use('/graphql', cors(), express.json(), expressMiddleware(gqlserver, {
+  context: async () => ({
+   products // stand in for database
+  })
+}));
 
 app.get("/api", (req, res) => {
   return res.status(200).json({
