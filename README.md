@@ -29,6 +29,12 @@ Install dependencies with:
 npm install
 ```
 
+and then build project with
+
+``` bash
+npm build
+```
+
 and then deploy with:
 
 ```
